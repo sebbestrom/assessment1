@@ -16,10 +16,10 @@ def list(conn):
     cur.close()
     return rows
 
-def insert(conn,first_name,last_name):
+def insert(conn,first_name):
     conn = connectdb()
     cur = conn.cursor()
-    cur.execute(f"INSERT INTO contacts (first_name, last_name) VALUES ('{first_name}','{last_name}')")
+    cur.execute(f"INSERT INTO contacts (first_name) VALUES ('{first_name}')")
     conn.commit()
     cur.close()
     
@@ -35,7 +35,7 @@ while keep_going:
     commands = input("Following commands are available: list, insert, delete: ").strip().lower()
     if commands == "list":
         conn = connectdb()
-        print("\nThis is the list:")
+        print("\nList of names:")
         listrows = list(conn)
         for listrow in listrows:
             print(listrow[0], "\t", listrow[1])
@@ -44,8 +44,7 @@ while keep_going:
     elif commands == "insert":
         conn = connectdb()
         first_name = input("Your first name: ").strip().title()
-        last_name = input("Your last name: ").strip()
-        insert(conn,first_name,last_name)
+        insert(conn,first_name)
         print(f"{first_name} has been added to the list.")
     elif commands == "delete":
         conn = connectdb()
