@@ -16,6 +16,20 @@ def list(conn):
     cur.close()
     return rows
 
+def insert(conn,first_name,last_name):
+    conn = connectdb()
+    cur = conn.cursor()
+    cur.execute(f"INSERT INTO contacts (first_name, last_name) VALUES ('{first_name}','{last_name}')")
+    conn.commit()
+    cur.close()
+    
+def delete(conn,first_name):
+    conn = connectdb()
+    cur = conn.cursor()
+    cur.execute(f"DELETE FROM contacts WHERE first_name = '{first_name}'")
+    conn.commit()
+    cur.close()
+
 keep_going = True
 while keep_going:
     commands = input("Following commands are available: list, insert, delete: ").strip().lower()
@@ -26,3 +40,20 @@ while keep_going:
         for listrow in listrows:
             print(listrow[0], "\t", listrow[1])
         print("\n")
+
+    elif commands == "insert":
+        conn = connectdb()
+        first_name = input("Your first name: ").strip().title()
+        last_name = input("Your last name: ").strip()
+        insert(conn,first_name,last_name)
+        print(f"{first_name} has been added to the list.")
+    elif commands == "delete":
+        conn = connectdb()
+        first_name = input("Your first name: ").strip().title()
+        delete(conn,first_name)
+        print(f"{first_name} has been deleted from the list.")
+    elif commands == "quit":
+        quit()
+        keep_going = False
+    else:
+        print("Invalid option, maybe you typed wrong?")
